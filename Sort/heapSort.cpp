@@ -1,87 +1,51 @@
 #include<iostream>
 using namespace std;
 
-void buildHeap(int a[], int num){
-    int leafNode = num / 2 - 1, i, j, k, temp;
-    for(i = leafNode; i >=0 ; --i){
-        if(2*i+2 > num-1){
-           if(a[i] >= a[2*i+1])
-               continue;
-            else
-               j = 2*i+1;
-        }
-	else{
-            if(a[i] >= a[2*i+1] && a[i] >= a[2*i+2])
-	        continue;
-	    else
-	       j = a[2*i+1] > a[2*i+2] ? 2*i+1:2*i+2;
-        }
-	temp = a[i];
-	a[i] = a[j];
-	a[j] = temp;
-	while(j <= leafNode){
-            if(2*j+2 > num-1){
-               if(a[j] >= a[2*j+1])
-                   break;
-               else
-                   k = 2*j+1;
-             }
-	     else{
-                if(a[j] >= a[2*j+1] && a[j] >= a[2*j+2])
-	             break;
-	        else
-	           k = a[2*j+1] > a[2*j+2] ? 2*j+1:2*j+2;
-             }
-             temp = a[j];
-	     a[j] = a[k];
-	     a[k] = temp;
-	     j = k;				
-	 }
-    }		
-}
-void sortHeap(int a[], int num){
-    int i, j, k, temp,leafNode;
-    buildHeap(a, num);
-    for(i = num - 1; i > 0; --i){
-        temp = a[i];
-	a[i] = a[0];
-        a[0] = temp;
-	if(i == 1)
-	    break;
-        leafNode = i / 2 - 1;
-	j = 0;
-	while(j <= leafNode){
-            if(2*j+2>i-1){
-                if(a[j] >= a[2*j+1])
-                    break;
-                else
-                    k = 2*j+1;
-                }     
-	    else{
-                if(a[j] >= a[2*j+1] && a[j] >= a[2*j+2])
-	   	    break;
-		else
-		    k = a[2*j+1] > a[2*j+2] ? 2*j+1 : 2*j+2;
+void heapAdjust(int a[], int i, int length){
+	int left, right, change, temp;
+	while(i <= length / 2 -1){
+		left = 2 * i + 1, right = 2 * i + 2;
+		if(right < length){
+			if(a[i] >= a[left] && a[i] >= a[right])
+				break;
+			else
+				change = a[left] > a[right] ? left : right;
+			    temp = a[i];
+				a[i] = a[change];
+				a[change] = temp;
+				i = change;
+		
+		}else{
+			if(a[i] >= a[left])
+				break;
+			else{
+				change = left;
+				temp = a[i];
+				a[i] = a[change];
+				a[change] = temp;
+				break;
+			}		
 		}
-	    temp = a[j];
-	    a[j] = a[k];
-	    a[k] = temp;
-	    j = k;     
-        }	
-    }	
-}	
-
+	}	
+}
 
 int main(){
-	int num, i;
-	cout<<"please input num:\n";
-	cin >> num;
-	int *p = new int[num];
-	for(i = 0; i < num; ++i)
-	    cin >> p[i];
-	sortHeap(p,num);
-	for(i = 0; i < num; ++i)
-	    cout << p[i]<< ' ';
-        cout<<endl;
+	int numCnt,i,temp;
+	cout<<"please input numCnt:\n";
+	cin >> numCnt;
+	int *p = new int[numCnt];
+	for(i = 0; i < numCnt; ++i)
+		cin >> p[i];
+	for(i = numCnt / 2 - 1; i >= 0; --i)
+		heapAdjust(p, i, numCnt);
+	for(i = numCnt - 1; i >= 1; --i){
+		temp = p[i];
+		p[i] = p[0];
+		p[0] = temp;
+		heapAdjust(p, 0, i);
+	}
+	for(i = 0; i < numCnt; ++i)
+		cout << p[i]<<' ';
 	delete []p;
+	return 0;
 }
