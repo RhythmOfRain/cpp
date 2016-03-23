@@ -71,3 +71,61 @@ bool list::remove(int pos){
     --length;
     return true;
 }
+int list::getEleByKey(int num){
+    int index = 1;
+    node *p = first -> next;
+    while(p != NULL){
+        if(p -> data == num)
+            return index;
+        ++index;
+        p = p -> next;
+    }
+    return 0;
+}
+
+int list::getEleByPos(int pos){
+    node *p = first -> next;
+    int index = 1;
+    while(index < pos){
+        p = p -> next;
+        ++index;
+    }
+    return p -> data;
+}
+bool list::changeByPos(int pos, int num){
+    if(pos < 1 || pos > length)
+        return false;
+    int index = 1;
+    node *p = first -> next;
+    while(p != NULL){
+        if(index == pos)
+            p -> data = num;
+	p = p -> next;
+        ++index;
+    }
+    return true; 
+}
+bool list::changeByNum(int orginal, int newer){
+    node *p = first -> next;
+    while(p != NULL){
+        if(p -> data == orginal)
+ 	    p -> data = newer;
+        p = p -> next;
+    }
+    return true;
+}
+void list::reverse(){
+    if(length < 2)
+        return ;
+    node *p, *pNext, *pNN;
+    p = first -> next;
+    pNext = p -> next;
+    p -> next = NULL;
+    while(pNext != NULL){
+        pNN = pNext -> next;
+        pNext -> next = p;
+        p = pNext;
+        pNext = pNN;
+    }
+    first -> next = p;
+}

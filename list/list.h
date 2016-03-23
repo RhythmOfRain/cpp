@@ -14,6 +14,7 @@ class list{
         int  getEleByPos(int pos);
         bool changeByPos(int pos, int num);
         bool changeByNum(int orginal, int newer);
+        void reverse();
     private:
         node *first;
         int length; 
