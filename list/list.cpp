@@ -18,7 +18,7 @@ list::list(int array[], int len){
         newNode = new node;
         newNode -> data = array[i];
         newNode -> next = p -> next;
-   	p -> next = newNode;
+   	    p -> next = newNode;
         p = newNode;
     }
 }
