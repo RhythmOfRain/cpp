@@ -48,3 +48,17 @@ public:
         return digits;
     }
 };
+
+better solution:
+	int cf = 1;
+        for(int i = digits.size() - 1; i >= 0 && cf != 0; --i){
+            digits[i] += cf;
+            if(digits[i] > 9){
+                digits[i] = 0;
+                cf = 1;
+            }else
+                cf = 0;
+        }
+        if(cf == 1)
+            digits.insert(digits.begin(), 1);
+        return digits;
