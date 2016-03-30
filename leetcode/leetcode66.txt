@@ -1,0 +1,50 @@
+66. Plus One My Submissions QuestionEditorial Solution
+Total Accepted: 93461 Total Submissions: 281414 Difficulty: Easy
+Given a non-negative number represented as an array of digits, plus one to the number.
+
+The digits are stored such that the most significant digit is at the head of the list.
+
+parameter all digits(0-9)
+
+my solution:
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int cf;//carry flag
+        if(digits.size() == 0)
+            return digits;
+        if(digits.size() == 1){
+            digits[0] += 1;
+            if(digits[0] >= 10){
+                cf = 1;
+                digits[0] -= 10;
+                digits.insert(digits.begin(), cf);
+            }
+            return digits;
+        }
+        int index = digits.size() - 1;
+        digits[index] += 1;
+        if(digits[index] >= 10){
+            cf = 1;
+            digits[index] -= 10;
+        }
+        --index;
+        while(cf && index >= 1){
+            digits[index] += cf;
+            if(digits[index] >= 10){
+                cf = 1;
+                digits[index] -= 10;
+            }else
+                cf = 0;
+            --index;
+        }
+        if(cf)
+            digits[0] += cf;
+        if(digits[0] >= 10){
+            cf = 1;
+            digits[0] -= 10;
+            digits.insert(digits.begin(), cf);
+        }    
+        return digits;
+    }
+};
