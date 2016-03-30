@@ -1,0 +1,31 @@
+12. Integer to Roman My Submissions QuestionEditorial Solution
+Total Accepted: 60078 Total Submissions: 156932 Difficulty: Medium
+Given an integer, convert it to a roman numeral.
+
+Input is guaranteed to be within the range from 1 to 3999.
+
+my solution:
+class Solution {
+public:
+    string intToRoman(int num) {
+        /*string first[] = {"I","II","III","IV","V","VI","VII","VIII","IX"};
+        string second[] = {"X","XX","XXX","XL","L","LX","LXX","LXXX","XC"};
+        string third[] = {"C","CC","CCC","CD","D","DC","DCC","DCCC","CM"};
+        string fouth[] = {"M","MMM","MMM"};*/
+        //vector<string**> vstr= {first, second, third, fouth};
+        string vstr[][9]= {"I","II","III","IV","V","VI","VII","VIII","IX",
+                           "X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
+                           "C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
+                           "M","MM","MMM"};
+        
+        string s;
+        int count = 0;
+        while(num){
+            if(num % 10)
+                s = vstr[count][num % 10 - 1] + s;
+            num /= 10;
+            ++count;
+        }
+    return s;
+    }
+};

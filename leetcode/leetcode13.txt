@@ -1,0 +1,61 @@
+13. Roman to Integer My Submissions QuestionEditorial Solution
+Total Accepted: 78895 Total Submissions: 203152 Difficulty: Easy
+Given a roman numeral, convert it to an integer.
+
+Input is guaranteed to be within the range from 1 to 3999.
+class Solution {
+public:
+    int romanToInt(string s) {
+        //map<char, int> msi = {{'I',1},{'V',5},{'X',10},{'L',50},{'C',100},{'D',500},{'M',1000}};
+        int sum = 0, i;
+        for(i = 0; i < s.size(); ++i){
+            switch(s[i]){
+                case 'M':sum += 1000;break;
+                case 'D':sum += 500; break;
+                case 'C':{
+                    if(s[i+1] == 'D'){
+                        ++i;
+                        sum += 400;
+                    }
+                    else if(s[i+1] == 'M'){
+                        ++i;
+                        sum += 900;
+                    }
+                    else
+                        sum += 100;
+                    break;
+                }
+                case 'L':sum += 50;break;
+                case 'X':{
+                     if(s[i+1] == 'L'){
+                        ++i;
+                        sum += 40;
+                    }
+                     else if(s[i+1] == 'C'){
+                        ++i;
+                        sum += 90;
+                    }
+                    else
+                        sum += 10;
+                    break;
+                }
+                case 'V':sum += 5;break;
+                case 'I':{
+                     if(s[i+1] == 'V'){
+                        ++i;
+                        sum += 4;
+                    }
+                    else if(s[i+1] == 'X'){
+                        ++i;
+                        sum += 9;
+                    }
+                    else
+                        sum += 1;
+                    break;
+                }
+                default :sum +=  0;break;
+            }
+        }
+        return sum;
+    }
+};
