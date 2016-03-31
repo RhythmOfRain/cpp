@@ -1,0 +1,42 @@
+26. Remove Duplicates from Sorted Array My Submissions QuestionEditorial Solution
+Total Accepted: 122070 Total Submissions: 367318 Difficulty: Easy
+Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
+
+Do not allocate extra space for another array, you must do this in place with constant memory.
+
+For example,
+Given input array nums = [1,1,2],
+
+Your function should return length = 2, with the first two elements of nums being 1 and 2 respectively. It doesn't matter what you leave beyond the new length.
+
+方案：找到第一个不是重复的数，放置在i指定的位置上，只需扫描一遍数组
+my solution:
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if(nums.size() == 0 || nums.size() == 1)
+            return nums.size();
+        int i = 0, j = 1, len = nums.size();
+        while(j != len){
+            if(nums[i] == nums[j]){
+                ++j;
+                while(j != nums.size() && nums[i] == nums[j])
+                    ++j;
+                if(j != nums.size()){
+                    ++i;
+                    int temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                    ++j;
+                }
+            }else{
+                ++i;
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+                ++j;
+            }
+        }
+        return ++i;
+    }
+};

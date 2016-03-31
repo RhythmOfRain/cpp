@@ -1,0 +1,45 @@
+21. Merge Two Sorted Lists My Submissions QuestionEditorial Solution
+Total Accepted: 118849 Total Submissions: 338135 Difficulty: Easy
+Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
+
+my solution:12ms
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(l1 == NULL && l2 == NULL)
+            return l1;
+        if(l1 == NULL && l2 != NULL)
+            return l2;
+        if(l1 != NULL && l2 == NULL)
+            return l1;
+            
+        ListNode *head, *p, *q, *temp;
+        if(l1 -> val <= l2 -> val){
+            head = l1; p = l1; q = l2;
+        }else{
+            head = l2; p = l2; q = l1;
+        }
+        while(p -> next != NULL && q != NULL){
+            if(p -> next -> val <= q -> val)
+                p = p -> next;
+            else{
+                temp = q;
+                q = q -> next;
+                temp -> next = p -> next;
+                p -> next = temp;
+                p = p -> next;
+            }
+        }
+        if(p -> next == NULL && q != NULL)
+            p -> next = q;
+        return head;
+    }
+};

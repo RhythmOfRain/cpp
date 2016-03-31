@@ -1,0 +1,29 @@
+206. Reverse Linked List My Submissions QuestionEditorial Solution
+Total Accepted: 97380 Total Submissions: 249726 Difficulty: Easy
+Reverse a singly linked list.
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head == NULL || head -> next == NULL)
+            return head;
+        ListNode *p = head, *pNext = head -> next, *pNN;
+        head -> next = NULL;
+        while(pNext){
+            pNN = pNext -> next;
+            pNext -> next = p;
+            p = pNext;
+            pNext = pNN;
+        }
+        head = p;
+        return head;
+    }
+};
