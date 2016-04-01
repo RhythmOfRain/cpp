@@ -1,0 +1,71 @@
+9. Palindrome Number My Submissions QuestionEditorial Solution
+Total Accepted: 115789 Total Submissions: 369199 Difficulty: Easy
+Determine whether an integer is a palindrome. Do this without extra space.
+my solution:
+负数不是回文数
+一种是生成字符串，然后比较字符串
+另一种是比较头、尾两个数字
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        /*if(x < 0)
+            return false;
+        if(x == 0)
+            return true;
+        string s = "";
+        while(x){
+            char c = (x % 10) + '0';
+            s += c;
+            x /= 10;
+        }
+        reverse(s.begin(), s.end());
+        for(int i = 0, j = s.size() - 1; i < j; ++i, --j){
+            if(s[i] != s[j])
+                return false;
+        }
+        return true;
+        */
+        /*
+        if(x < 0)
+            return false;
+        if(x < 10)
+            return true;
+        int temp = x, length = 1;
+        while(temp >= 10){
+            length *= 10;
+            temp /= 10;
+        }
+        int right = 0, left = 0;
+        while(x >= 10){
+            right = x % 10;
+            left = x / length;
+            if(right != left)
+                return false;
+            temp = x % length;
+            x = temp / 10;
+            length /= 100;
+        }
+        return true;
+        */
+       
+        if(x < 0)
+            return false;
+        if(x < 10)
+            return true;
+        int temp = x, length = 1;
+        while(temp >= 10){
+            length *= 10;
+            temp /= 10;
+        }
+        int right = 0, left = 0;
+        while(x){// x != 0 is very important
+            right = x % 10;
+            left = x / length;
+            if(right != left)
+                return false;
+            x = (x % length) / 10;
+            length /= 100;
+        }
+        return true;
+    }
+};

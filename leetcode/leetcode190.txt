@@ -1,0 +1,30 @@
+190. Reverse Bits My Submissions QuestionEditorial Solution
+Total Accepted: 58256 Total Submissions: 199312 Difficulty: Easy
+Reverse bits of a given 32 bits unsigned integer.
+
+For example, given input 43261596 (represented in binary as 00000010100101000001111010011100), return 964176192 (represented in binary as 00111001011110000010100101000000).
+
+Follow up:
+If this function is called many times, how would you optimize it?
+
+Related problem: Reverse Integer
+
+my solution:
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        unsigned lflag = 0x80000000, rflag = 0x00000001;
+        while(lflag > rflag){
+	    unsigned ltemp = n & lflag;
+	    unsigned rtemp = n & rflag;
+            if( (ltemp == 0 && rtemp != 0) || (ltemp != 0 && rtemp == 0)){
+            //如果不相等，则指定位取反 注意 if语句中最好用变量来进行比较，不要在if判断式中	            //计算然后再比较
+			    n ^= lflag;
+			    n ^= rflag;
+            }
+            lflag >>= 1;
+            rflag <<= 1;
+        }
+        return n;      
+    }
+};

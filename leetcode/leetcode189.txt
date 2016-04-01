@@ -1,0 +1,32 @@
+189. Rotate Array My Submissions QuestionEditorial Solution
+Total Accepted: 67376 Total Submissions: 322070 Difficulty: Easy
+Rotate an array of n elements to the right by k steps.
+
+For example, with n = 7 and k = 3, the array [1,2,3,4,5,6,7] is rotated to [5,6,7,1,2,3,4].
+
+Note:
+Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.
+
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int size = nums.size();
+        k %= size;
+        if(k == 0)
+            return ;
+        change(nums, 0, size - k - 1);
+        change(nums, size - k, size - 1);
+        change(nums, 0, size - 1);
+    }
+    
+private:    
+    void change(vector<int>& nums, int i, int j){
+        while(i < j){
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+            ++i;
+            --j;
+        }
+    }
+};

@@ -1,0 +1,16 @@
+198. House Robber My Submissions QuestionEditorial Solution
+Total Accepted: 62485 Total Submissions: 184398 Difficulty: Easy
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+
+Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight without alerting the police.
+
+思路：对于第n个房子，有两种策略，选择偷或者不偷，如果偷，则前一个房子不能偷，获得的收益的为前n-2个房子获得的最高收益加上第n个房子的收益；如果不偷，则收益等于前n-1个房子获得的最高收益，选择二者中高的作为前n个房子所能取得的最高收益
+
+代码：
+int prePre = 0, pre = 0, now = 0;
+for(int i = 0; i < nums.size(); ++i){
+    now = prePre + nums[i] > pre ? prePre + nums[i] : pre;
+    prePre = pre;
+    pre = now;
+}
+return now;

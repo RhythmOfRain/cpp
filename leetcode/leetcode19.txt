@@ -1,0 +1,48 @@
+19. Remove Nth Node From End of List My Submissions QuestionEditorial Solution
+Total Accepted: 102083 Total Submissions: 349748 Difficulty: Easy
+Given a linked list, remove the nth node from the end of list and return its head.
+
+For example,
+
+   Given linked list: 1->2->3->4->5, and n = 2.
+
+   After removing the second node from the end, the linked list becomes 1->2->3->5.
+Note:
+Given n will always be valid.
+Try to do this in one pass.
+
+思路：
+设置一个指针p先走N步，然后q指针指向头结点，同时开始往后移，当p到达NULL指针，或者末尾结点时，停止指针的移动，当p == NULL时，head指针向后移动一个，当p ！= NULL时，将p指针指向的结点的next域换成后继的后继即可
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode *fast = head, *slow = head, *temp;
+        int cnt = 0;
+        while(cnt < n){
+            fast = fast -> next;
+            ++cnt;
+        }
+        while(fast != NULL && fast -> next){
+            fast = fast -> next;
+            slow = slow -> next;
+        }
+        if(fast == NULL){
+            temp = head;
+            head = head -> next;
+        }else{
+        temp = slow -> next;
+        slow -> next = slow -> next -> next;
+        }
+        delete temp;
+        return head;  
+    }
+};
