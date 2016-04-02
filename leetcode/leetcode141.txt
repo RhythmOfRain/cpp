@@ -1,0 +1,32 @@
+141. Linked List Cycle My Submissions QuestionEditorial Solution
+Total Accepted: 98835 Total Submissions: 267817 Difficulty: Medium
+Given a linked list, determine if it has a cycle in it.
+
+Follow up:
+Can you solve it without using extra space?
+
+my solution:思路
+1.设置set，将遍历过的地址加入，如果发现重复了，则说明有环
+2.设置快慢指针，如果有环，则慢指针总会被快指针追上
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode *slow = head, *fast = head;
+        while(slow && fast && fast -> next){
+            slow = slow -> next;
+            fast = fast -> next -> next;
+            if(slow == fast)
+                return true;
+        }
+        return false;
+    }
+};

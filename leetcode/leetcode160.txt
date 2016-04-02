@@ -1,0 +1,76 @@
+160. Intersection of Two Linked Lists My Submissions QuestionEditorial Solution
+Total Accepted: 68898 Total Submissions: 228106 Difficulty: Easy
+Write a program to find the node at which the intersection of two singly linked lists begins.
+
+
+For example, the following two linked lists:
+
+A:          a1 → a2
+                   ↘
+                     c1 → c2 → c3
+                   ↗            
+B:     b1 → b2 → b3
+begin to intersect at node c1.
+
+
+Notes:
+
+If the two linked lists have no intersection at all, return null.
+The linked lists must retain their original structure after the function returns.
+You may assume there are no cycles anywhere in the entire linked structure.
+Your code should preferably run in O(n) time and use only O(1) memory.
+
+思路：
+首先计算两个链表的长度，然后两个链表从由链表尾开始算，等长的距离处还是向后扫描，如果两个指针相等，则找到了第一个交点，如果扫到最后都没有交点，则返回NULL
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(headA  == NULL || headB == NULL)
+            return NULL;
+        int aCnt = 0, bCnt = 0;
+        ListNode *p = headA, *q = headB;
+        while(p){
+            ++aCnt;
+            p = p -> next;
+        }
+        while(q){
+            ++bCnt;
+            q = q -> next;
+        }
+        p = headA;
+        q = headB;
+        if(aCnt != bCnt){
+            if(aCnt > bCnt){
+                int count = 0;
+                int sub = aCnt - bCnt;
+                while(count < sub){
+                    p = p -> next;
+                    ++count;
+                }
+            }else{
+                int count = 0;
+                int sub = bCnt - aCnt;
+                while(count < sub){
+                    q = q -> next;
+                    ++count;
+                }
+            }
+        }
+        while(p && q){
+            if(p == q)
+                return p;
+            p = p -> next;
+            q = q -> next;
+        }
+        return NULL;
+    }
+};

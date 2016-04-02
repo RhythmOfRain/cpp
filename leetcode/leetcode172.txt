@@ -1,0 +1,20 @@
+172. Factorial Trailing Zeroes My Submissions QuestionEditorial Solution
+Total Accepted: 55073 Total Submissions: 169797 Difficulty: Easy
+Given an integer n, return the number of trailing zeroes in n!.
+
+Note: Your solution should be in logarithmic time complexity.
+
+my solution:
+思路：最后的结果等于n/5+n/25+n/125 ...直到n/（5的x次方)等于0
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int count = 0;
+        int result = n / 5;
+        while(result){
+            count += result;
+            result /= 5;
+        }
+        return count;
+    }
+};
