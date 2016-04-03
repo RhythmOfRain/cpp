@@ -1,0 +1,30 @@
+338. Counting Bits My Submissions QuestionEditorial Solution
+Total Accepted: 10928 Total Submissions: 19594 Difficulty: Medium
+Given a non negative integer number num. For every numbers i in the range 0 ≤ i ≤ num calculate the number of 1's in their binary representation and return them as an array.
+
+Example:
+For num = 5 you should return [0,1,1,2,1,2].
+
+Follow up:
+
+It is very easy to come up with a solution with run time O(n*sizeof(integer)). But can you do it in linear time O(n) /possibly in a single pass?
+Space complexity should be O(n).
+Can you do it like a boss? Do it without using any builtin function like __builtin_popcount in c++ or in any other language.
+
+my solution:
+思路：
+举例说，8的二进制表示有1个1,9的二进制表示中1的位数等于（8的二进制表示中1的位数+1的二进制表示中1的位数）
+同理，10的二进制表示中1的个数等于（8的二进制表示中1的位数+2的二进制表示中1的位数）
+怎么简化计算index这步操作？现在的方案是假设目标是10，首先要计算出8，然后得到index = 10 - 8
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> vi(num+1,1);
+        vi[0] = 0;
+        for(int i = 2; i <= num; ++i){
+            int index = i - pow(2,(int)log2(i));
+            vi[i] += vi[index];
+        }
+        return vi;
+    }
+};

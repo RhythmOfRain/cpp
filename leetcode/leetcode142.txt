@@ -1,0 +1,52 @@
+142. Linked List Cycle II My Submissions QuestionEditorial Solution
+Total Accepted: 71543 Total Submissions: 227198 Difficulty: Medium
+Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+Note: Do not modify the linked list.
+
+Follow up:
+Can you solve it without using extra space?
+
+思路：
+首先检查有没有环，设置快慢指针fast、slow，fast每次走两步，slow每次走一步，如果在某一时刻，fast == slow，则证明有环，
+此时将fast指针指向head，fast和slow同时开始移动，每次都是一步，则当fast == slow时，那个结点就是环开始的地方
+
+假设表头到环开始的结点，距离是x，环开始的地方到fast、slow指针第一次相遇的地方的距离是y，且相遇点到环开始的地方距离是z，则可以得到如下等式，slow指针必定在进入环后第一圈内被追到，此时fast指针可能在环内已经走了n圈
+2(x+y) = x + n(y+z) + y，可以得到(n-1)(y+z)+z=x，x的距离等于（n-1）个环加上z的距离
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        /*set<ListNode*> sl;
+        while(head){
+            if(sl.find(head) != sl.end())
+                return head;
+            sl.insert(head);
+            head = head -> next;
+        }
+        return NULL;*/
+
+        ListNode *fast = head, *slow = head;
+        while(slow && fast && fast -> next){
+            slow = slow -> next;
+            fast = fast -> next -> next;
+            if(fast == slow){
+                fast = head;
+                while(fast != slow){
+                    fast = fast -> next;
+                    slow = slow -> next;
+                }
+                return fast;
+            }
+        }
+        return NULL;
+    }
+};

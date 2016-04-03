@@ -1,0 +1,71 @@
+92. Reverse Linked List II My Submissions QuestionEditorial Solution
+Total Accepted: 68320 Total Submissions: 246793 Difficulty: Medium
+Reverse a linked list from position m to n. Do it in-place and in one-pass.
+
+For example:
+Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+
+return 1->4->3->2->5->NULL.
+
+Note:
+Given m, n satisfy the following condition:
+1 ≤ m ≤ n ≤ length of list.
+
+思路：添加头结点方便处理，否则如果m == 1，则需要特殊处理
+      首先找到m结点的前驱结点，记录为first指针，然后找到n结点的后继结点，记录为second指针，然后将m到n结点这段       链表逆转，返回新的头指针(注意此时链表的尾结点的后继执向NULL），最后将原来的链表和新返回的链表链接起来即       可返回值为头结点的后继结点
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if(m == n)
+            return head;
+        ListNode *preHead = new ListNode(0);//add an head node
+        preHead -> next = head;
+        int count = 0;
+        ListNode *p = preHead, *first = NULL, *second = NULL, *orginalM = NULL;
+        while(count < m - 1){
+            ++count;
+            p = p -> next;
+        }
+        first = p;
+        while(count < n){
+            ++count;
+            p = p -> next;
+        }
+        second = p -> next;
+        p -> next = NULL;
+        orginalM = first -> next;//means orginals m node
+        p = reverse(orginalM);
+        //p = reverse(first -> next);
+        first -> next = p;
+        /*
+        while(first -> next){
+            first = first -> next;
+            
+        }*/
+        orginalM -> next = second;
+        return preHead->next;
+    }
+public:
+    ListNode* reverse(ListNode *head){
+        if(head == NULL || head -> next == NULL)
+            return head;
+        ListNode *p = head, *pN = head -> next, *pNN = NULL;
+        p -> next = NULL;
+        while(pN){
+            pNN = pN -> next; 
+            pN -> next = p;
+            p = pN;
+            pN = pNN;
+        }
+        return p;//reverse list's head
+    }
+};

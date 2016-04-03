@@ -1,0 +1,68 @@
+147. Insertion Sort List My Submissions QuestionEditorial Solution
+Total Accepted: 67922 Total Submissions: 233335 Difficulty: Medium
+Sort a linked list using insertion sort.
+
+my solution:
+我的思路：
+增加一个头结点，方便处理。对于每个节点，找到第一个大于等于其值的结点，插到该节点前面即可，但是比较耗时，需要100ms，另一个解法思路一样，但是操作更少，只需24ms
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+        if(head == NULL || head -> next == NULL)
+            return head;
+        ListNode *dummy = new ListNode(0);
+        dummy -> next = head;
+        ListNode *preP = head, *p = head -> next;
+        while(p){
+            if(p -> val >= preP -> val){
+                preP = p;
+                p = p -> next;
+                continue;
+            }
+            ListNode *preSearch = dummy, *search = dummy -> next;
+            while(search -> val <= p -> val && search != p){
+                preSearch = search;
+                search = search -> next;
+            }if(search != p){
+                preP -> next = p -> next;
+                p -> next = preSearch -> next;
+                preSearch -> next = p;
+            }
+            preP = p;
+            p = p -> next;
+            
+        }//attention : 此处有问题，此时要删除dummy指针指向的对象，方法见solution 2
+        return dummy -> next;
+    }
+};
+
+solution 2：
+ ListNode* new_head = new ListNode(0);
+        new_head -> next = head;
+        ListNode* pre = new_head;
+        ListNode* cur = head;
+        while (cur) {
+            if (cur -> next && cur -> next -> val < cur -> val) {
+                while (pre -> next && pre -> next -> val < cur -> next -> val)
+                    pre = pre -> next;
+                /* Insert cur -> next after pre.*/
+                ListNode* temp = pre -> next;
+                pre -> next = cur -> next;
+                cur -> next = cur -> next -> next;
+                pre -> next -> next = temp;
+                /* Move pre back to new_head. */
+                pre = new_head;
+            }
+            else cur = cur -> next;
+        }
+        ListNode* res = new_head -> next;
+        delete new_head;
+        return res;

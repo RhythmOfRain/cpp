@@ -1,0 +1,57 @@
+86. Partition List 
+Total Accepted: 62868 Total Submissions: 214823 Difficulty: Medium
+Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+
+You should preserve the original relative order of the nodes in each of the two partitions.
+
+For example,
+Given 1->4->3->2->5->2 and x = 3,
+return 1->2->2->4->3->5.
+
+my solution: 4ms，beats 100%
+首先遍历链表，统计数据个数count，并且使tail指针指向最后一个元素
+然后重新遍历数组，循环终止的条件了处理了count个数据，如果发现数据大于等于指定值，则将该节点添加到tail后面，并使tail指向新添加的结点
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if(head == NULL || head -> next == NULL)
+            return head;
+        ListNode *dummy = new ListNode(0);
+        dummy -> next = head;
+        ListNode *pre = dummy,*tail = NULL;
+        int count = 0;
+        while(pre -> next){
+            pre = pre -> next;
+            ++count;
+        }
+        tail = pre;
+        pre = dummy;
+        while(count){
+            if(pre -> next -> val < x)
+                pre = pre -> next;
+            else{
+                if(pre -> next != tail){
+                    ListNode *temp = pre -> next;
+                    pre -> next = temp -> next;
+                    temp -> next = tail -> next;
+                    tail -> next = temp;
+                    tail = temp;
+                }
+            }
+            --count;
+        }
+        pre = dummy -> next;
+        delete dummy;
+        return pre;
+    }
+};
