@@ -1,0 +1,46 @@
+205. Isomorphic Strings My Submissions QuestionEditorial Solution
+Total Accepted: 52405 Total Submissions: 179049 Difficulty: Easy
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+
+For example,
+Given "egg", "add", return true.
+
+Given "foo", "bar", return false.
+
+Given "paper", "title", return true.
+
+my solution:
+两个set分别保存key，value，一个map保存映射关系，如果key或者value出现，但是并不符合map中的映射关系，则返回false
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        unordered_map<char, char> um1;
+        unordered_set<char> key;
+        unordered_set<char> value;
+        for(int i = 0; i < s.size(); ++i){
+            if((key.find(s[i]) != key.end() && um1[s[i]] != t[i]) || (value.find(t[i]) != value.end() && um1[s[i]] != t[i]))
+                return false;
+            else{
+                key.insert(s[i]);
+                value.insert(t[i]);
+                um1[s[i]] = t[i];
+            }
+        }
+        return true;
+    }
+};
+
+other solution：
+ bool isIsomorphic(string s, string t) {
+        int m1[256] = {0}, m2[256] = {0}, n = s.size();
+        for (int i = 0; i < n; ++i) {
+            if (m1[s[i]] != m2[t[i]]) return false;
+            m1[s[i]] = i + 1;
+            m2[t[i]] = i + 1;
+        }
+        return true;
+}

@@ -1,0 +1,39 @@
+67. Add Binary 
+Total Accepted: 80289 Total Submissions: 295324 Difficulty: Easy
+Given two binary strings, return their sum (also a binary string).
+
+For example,
+a = "11"
+b = "1"
+Return "100".
+
+
+
+my solution:
+ string addBinary(string a, string b) {
+        string result;
+        int aIndex = a.size() - 1, bIndex = b.size() - 1, cf = 0;
+        int digitA,digitB;
+        while(aIndex >= 0 || bIndex >= 0 || cf){
+            digitA = aIndex >= 0 ? a[aIndex--] - '0': 0;
+            digitB = bIndex >= 0 ? b[bIndex--] - '0': 0;
+            result = to_string((digitA + digitB + cf) % 2) + result;
+            cf = (digitA + digitB + cf) / 2;
+        }
+        return result;
+        
+        
+    }
+
+other solution:4ms
+string addBinary(string a, string b) {
+        string result;
+        int aIndex = a.size() - 1, bIndex = b.size() - 1, cf = 0;
+        while(aIndex >= 0 || bIndex >= 0 || cf){
+            cf += aIndex >= 0 ? a[aIndex--] - '0': 0;
+            cf += bIndex >= 0 ? b[bIndex--] - '0': 0;
+            result = char(cf % 2 + '0') + result;
+            cf /= 2;
+        }
+        return result;  
+}
