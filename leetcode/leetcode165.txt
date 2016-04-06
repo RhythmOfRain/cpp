@@ -1,0 +1,66 @@
+165. Compare Version Numbers 
+Total Accepted: 49827 Total Submissions: 288168 Difficulty: Easy
+Compare two version numbers version1 and version2.
+If version1 > version2 return 1, if version1 < version2 return -1, otherwise return 0.
+
+You may assume that the version strings are non-empty and contain only digits and the . character.
+The . character does not represent a decimal point and is used to separate number sequences.
+For instance, 2.5 is not "two and a half" or "half way to version three", it is the fifth second-level revision of the second first-level revision.
+
+Here is an example of version numbers ordering:
+
+0.1 < 1.1 < 1.2 < 13.37
+
+my solution:litte complex
+class Solution {
+public:
+    int compareVersion(string version1, string version2) {
+        vector<int> vs1, vs2;
+        int start = 0;
+        for(int i = 0; i < version1.size(); ++i){
+            if(version1[i] == '.'){
+                vs1.push_back(stoi(version1.substr(start, i - start)));
+                start = i + 1;
+            }
+        }
+        if(start != version1.size() && stoi(version1.substr(start, version1.size() - start)))
+            vs1.push_back(stoi(version1.substr(start, version1.size() - start)));
+        start = 0;
+        for(int i = 0; i < version2.size(); ++i){
+            if(version2[i] == '.'){
+                vs2.push_back(stoi(version2.substr(start, i - start)));
+                start = i + 1;
+            }
+        }
+        if(start != version2.size() && stoi(version2.substr(start, version2.size() - start)))
+            vs2.push_back(stoi(version2.substr(start, version2.size() - start)));
+        int i = 0, j = 0;
+        while(i != vs1.size() && j != vs2.size()){
+            if(vs1[i] < vs2[j])
+                return -1;
+            if(vs1[i] > vs2[j])
+                return 1;
+            ++i;++j;
+        }
+        if(i == vs1.size() && j == vs2.size())
+            return 0;
+        if(i == vs1.size()){
+            while(j != vs2.size()){
+                
+                if(vs2[j] != 0)
+                    return -1;
+                ++j;
+            }
+            return 0;
+        }
+         if(j == vs2.size()){
+            while(i != vs1.size()){
+                
+                if(vs1[i] != 0)
+                    return 1;
+                ++i;
+            }
+            return 0;
+        }
+    }
+};
