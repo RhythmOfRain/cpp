@@ -1,0 +1,90 @@
+107. Binary Tree Level Order Traversal II 
+Total Accepted: 76617 Total Submissions: 227571 Difficulty: Easy
+Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
+
+For example:
+Given binary tree {3,9,20,#,#,15,7},
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its bottom-up level order traversal as:
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+
+思路：
+1.第一种方案就是102的做法，然后把结果逆序
+2.第二种方案是在vector中先存结点的右节点，然后存左结点，然后逆序读取
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int>> result;
+        vector<int> curVec;
+        if(!root) return result;
+        queue<TreeNode*> nodeQue;
+        nodeQue.push(root);
+        nodeQue.push(NULL);
+        while(!nodeQue.empty()){
+            TreeNode *temp;
+            temp = nodeQue.front();
+            nodeQue.pop();
+            if(temp == NULL){
+                result.push_back(curVec);
+                curVec.resize(0);
+                if(nodeQue.size())
+                    nodeQue.push(NULL);
+            }else{
+                curVec.push_back(temp -> val);
+                if(temp->left) nodeQue.push(temp->left);
+                 if(temp->right) nodeQue.push(temp->right);
+                
+            }
+        }
+        reverse(result.begin(), result.end());
+        return result;
+        /*
+        vector<vector<int>> result;
+        if(!root) return result;
+        vector<TreeNode *> node = {root, NULL};
+        int i = 0;
+        while(i != node.size() - 1){
+            if(node[i] == NULL){
+                node.push_back(NULL);
+            }
+            else{
+                if(node[i] -> right)
+                    node.push_back(node[i] -> right);
+                if(node[i] -> left)
+                    node.push_back(node[i] -> left);
+            }
+            ++i;
+        }
+        vector<int> cur;
+        i = node.size() - 2;
+        while(i >= 0){
+            if(node[i] == NULL){
+                result.push_back(cur);
+                cur.resize(0);
+            }   
+            else
+                cur.push_back(node[i] -> val);
+            --i;
+        }    
+        result.push_back(cur);
+        return result;
+        */
+    }
+};

@@ -1,0 +1,73 @@
+101. Symmetric Tree My Submissions QuestionEditorial Solution
+Total Accepted: 102656 Total Submissions: 304196 Difficulty: Easy
+Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+
+For example, this binary tree is symmetric:
+
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+But the following is not:
+    1
+   / \
+  2   2
+   \   \
+   3    3
+
+思路：
+根节点的左右子树分布深度优先遍历，左边的子树是先左后右，右边的子树是先右后左，如果发现对应结点的值不等，则返回false
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root == NULL)
+            return true;
+        stack<TreeNode *> s1,s2;
+        s1.push(root -> left);s2.push(root -> right);
+        while(!s1.empty() && !s2.empty()){
+            TreeNode *p1 = s1.top(), *p2 = s2.top();
+            s1.pop();s2.pop();
+            if(p1 == NULL && p2 == NULL)
+                continue;
+            
+            if(p1 == NULL || p2 == NULL || (p1 -> val != p2 -> val))
+                return false;
+            s1.push(p1 -> right); s1.push(p1 -> left);
+            s2.push(p2 -> left); s2.push(p2 -> right);
+        }
+        if(s1.empty() && s2.empty())
+            return true;
+        return false;
+        
+    }
+};
+
+递归的方法：
+bool isSymmetric(TreeNode *root) {
+        if (!root) return true;
+        return helper(root->left, root->right);
+    }
+
+    bool helper(TreeNode* p, TreeNode* q) {
+        if (!p && !q) {
+            return true;
+        } else if (!p || !q) {
+            return false;
+        }
+
+        if (p->val != q->val) {
+            return false;
+        }
+
+        return helper(p->left,q->right) && helper(p->right, q->left); 
+    }
