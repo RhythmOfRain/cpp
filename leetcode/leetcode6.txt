@@ -1,0 +1,37 @@
+6. ZigZag Conversion My Submissions QuestionEditorial Solution
+Total Accepted: 83780 Total Submissions: 351825 Difficulty: Easy
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string text, int nRows);
+convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+
+my solution:
+每行的元素的间隔是有规律的，画图可以看出来
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        s = "0" + s;
+        string result = "";
+	    int len = s.size(),
+	        dist = 2 * (numRows - 1) == 0 ? 1 : 2 * (numRows - 1);
+        numRows = numRows > len - 1 ? len - 1 : numRows;
+        for(int i = 1; i <= numRows; ++i){
+		    result += s[i];
+            int curDis = 2 * (numRows - i) == 0 ? dist : 2 * (numRows - i) ;
+		    int j = i + curDis;
+		    while(j < len){
+		        result += s[j];
+			    if(curDis != dist)
+				    curDis = dist - curDis;
+			    j += curDis;
+    	    }
+	    }	
+	    return result;
+    }
+};
