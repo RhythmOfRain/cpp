@@ -1,0 +1,31 @@
+223. Rectangle Area My Submissions QuestionEditorial Solution
+Total Accepted: 34741 Total Submissions: 116848 Difficulty: Easy
+Find the total area covered by two rectilinear rectangles in a 2D plane.
+
+Each rectangle is defined by its bottom left corner and top right corner as shown in the figure.
+
+Rectangle Area
+Assume that the total area is never beyond the maximum possible value of int.
+
+my solution:36 ms
+
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        
+        
+        int sum = (C - A) * (D - B) + (G - E) * ( H - F);
+        if(A >= G || C <= E || D <= F || B >= H)
+            return sum;
+        
+        vector<int> length = {A,C,E,G};
+        vector<int> breath = {B,D,F,H};
+        sort(length.begin(), length.end());
+        sort(breath.begin(), breath.end());
+        
+        int dul = (length[2]-length[1]) * (breath[2] - breath[1]);
+        
+        return sum - dul;
+        
+    }
+};
