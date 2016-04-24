@@ -12,7 +12,7 @@ Follow up: Could you improve it to O(n log n) time complexity?
 
 my solution:
 o(n^2)
-依次遍历整个序列，每一次求出从第一个数到当前这个数的最长上升子序列，直至遍历到最后一个数字为止，然后再取dp数组里最大的那个即为整个序列的最长上升子序列。我们用dp[i]来存放序列1-i的最长上升子序列的长度，那么dp[i]=max(dp[j])+1,(j∈[1, i-1]); 显然dp[1]=1,我们从i=2开始遍历后面的元素即可。
+依次遍历整个序列，每一次求出从第一个数到当前这个数的最长上升子序列，直至遍历到最后一个数字为止，然后再取dp数组里最大的那个即为整个序列的最长上升子序列。我们用dp[i]来存放序列1-i的最长上升子序列的长度，那么dp[i]=max(dp[j])+1,(j∈[1, i-1],且nums[i] > nums[j]); 显然dp[1]=1,我们从i=2开始遍历后面的元素即可。
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
