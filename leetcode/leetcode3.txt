@@ -1,0 +1,38 @@
+3. Longest Substring Without Repeating Characters   My Submissions QuestionEditorial Solution
+Total Accepted: 145667 Total Submissions: 663065 Difficulty: Medium
+Given a string, find the length of the longest substring without repeating characters.
+
+Examples:
+
+Given "abcabcbb", the answer is "abc", which the length is 3.
+
+Given "bbbbb", the answer is "b", with the length of 1.
+
+Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
+my solution:
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int len = s.size();
+        if(len < 2)
+            return len;
+        unordered_set<char> usc = {s[0]};
+        int first = 0, second = 0, maxLen = 0;
+        for(second = 1; second < len; ++second){
+            if(usc.find(s[second]) != usc.end()){
+                maxLen = max(maxLen, second - first);
+                while(first < second && s[first] != s[second]){
+                    usc.erase(s[first]);
+                    ++first;
+                }
+                if(first < second)
+                    ++first;
+            }else{
+                usc.insert(s[second]);
+            }
+        }
+        maxLen = max(maxLen, second - first);
+        return maxLen;
+    }
+};
