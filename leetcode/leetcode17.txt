@@ -1,0 +1,57 @@
+17. Letter Combinations of a Phone Number   My Submissions QuestionEditorial Solution
+Total Accepted: 78707 Total Submissions: 273733 Difficulty: Medium
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+
+
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+
+my solution:
+class Solution {
+public:
+    string alpha[10] = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    vector<string> letterCombinations(string digits) {
+        if(digits.size() == 0)
+            return vector<string>({});
+        vector<string> vs = {""};
+	    int len = digits.size();
+	    for(int i = 0; i < len; ++i){
+		    string sub = alpha[digits[i] - '0'];
+		    if(sub == "")
+			    return vector<string>({});
+		    int sublen = sub.size();
+		    int j = vs.size() - 1;
+		    vector<string> vss;
+		    while(j >= 0){
+			    for(int k = 0; k < sublen; ++k)
+			        vss.push_back(vs[j] + sub[k]);
+			    --j;
+		    }
+		    vs = vss;
+		    vss.clear();
+	    }
+	    return vs;
+    }
+};
+
+other concise solution:
+vector<string> res;
+	    if(digits == "")
+	        return res;
+	    res.push_back("");
+	    int len = digits.size();
+	    for(int i = 0; i < len; ++i){
+	        if(alpha[digits[i] - '0'] == "")
+	            return vector<string>();
+	        for(int res_size = res.size();res_size > 0; --res_size){
+	            string str = res[0];
+	            res.erase(res.begin());
+	            int sublen = alpha[digits[i] - '0'].size();
+	            for(int j = 0; j < sublen; ++j)
+	                res.push_back(str + alpha[digits[i] - '0'][j]);
+	        }
+	    }
+	    return res;

@@ -1,0 +1,41 @@
+38. Count and Say   My Submissions QuestionEditorial Solution
+Total Accepted: 79987 Total Submissions: 275566 Difficulty: Easy
+The count-and-say sequence is the sequence of integers beginning as follows:
+1, 11, 21, 1211, 111221, ...
+
+1 is read off as "one 1" or 11.
+11 is read off as "two 1s" or 21.
+21 is read off as "one 2, then one 1" or 1211.
+Given an integer n, generate the nth sequence.
+
+Note: The sequence of integers will be represented as a string.
+
+my solution:to_string(4ms)  char(count + '0')(0ms)
+class Solution {
+public:
+    string countAndSay(int n) {
+        string s = "1";
+        for(int loop = 1; loop < n; ++loop){
+            string t = s;
+            s = "";
+            char digit = t[0];
+            int count = 1;
+            int len = t.size();
+            for(int i = 1; i < len; ++i){
+                if(t[i] == digit)
+                    ++count;
+                else{
+                    //s += to_string(count) + digit;
+                    s += char(count + '0');
+                    s += digit;
+                    digit = t[i];
+                    count = 1;
+                }
+            }
+            s += char(count + '0');
+            s += digit;
+            //s += to_string(count) + digit;
+        }
+        return s;
+    }
+};
