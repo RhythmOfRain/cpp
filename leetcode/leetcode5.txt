@@ -1,0 +1,64 @@
+5. Longest Palindromic Substring   My Submissions QuestionEditorial Solution
+Total Accepted: 107464 Total Submissions: 465096 Difficulty: Medium
+Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+找出字符串中的最长回文子串
+
+my solution:36ms o(n^n)
+假设现在已经遍历到第 i 个字符，要找出以该字符为“中心”的最长对称字符串，我们需要用另两个指针分别向前和向后移动，直到指针到达字符串两端或者两个指针所指的字符不相等。因为对称子字符串有两种情况，所以需要写出两种情况下的代码： 
+（1） 第 i 个字符是该对称字符串的真正的中心，也就是说该对称字符串以第 i 个字符对称， 比如： “aba” 
+（2）第 i 个字符串是对称字符串的其中一个中心。比如“abba”。 
+所以遍历到每个字符都要考虑两种情况，它可能是在奇数个回文串中或者是在偶数个回文串中
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int len = s.size();
+	    int left, right, max = 0, begin = 0;
+	    for(int i = 0; i < len; ++i){
+                    if (len - i <= max / 2) break;
+		    int oddCount = 1;
+            	    left = i - 1;
+		    right = i + 1;
+		    while(left >= 0 && right < len && s[left] == s[right]){
+			    --left;
+			    ++right;
+			    oddCount += 2;
+		    }
+		    if(oddCount > max){
+			    max = oddCount;
+			    begin = left + 1;
+		    }
+		    int evenCount = 0;
+		    left = i;
+		    right = i + 1;
+		    while(left >= 0 && right < len && s[left] == s[right]){
+			    --left;
+			    ++right;
+			    evenCount += 2;
+		    }
+		    if(evenCount > max){
+			    max = evenCount;
+			    begin = left + 1;
+		    }	
+	    }
+	    return s.substr(begin, max);
+    }
+};
+
+concise solution:4 ms
+关键的一步是跳过重复的数字，这样能够避免上述方案中关于奇数、偶数的分别讨论，同时将i更新为right + 1
+ int len = s.size(), max_len = 0, begin = 0;
+	    for(int i = 0; i < len && len - i > max_len / 2;){
+		    int left = i, right = i;
+		    while(right < len - 1 && s[right + 1] == s[right]) ++right;
+		        i = right + 1;
+		    while(left > 0 && right < len - 1 && s[left - 1] == s[right + 1]){
+			    --left;
+			    ++right;
+		    }
+		    int cur_len = right - left + 1;
+		    if(cur_len > max_len){
+			    max_len = cur_len;
+			    begin = left;
+		    }
+	    }
+	    return s.substr(begin, max_len);
