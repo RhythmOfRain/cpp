@@ -1,0 +1,59 @@
+71. Simplify Path   My Submissions QuestionEditorial Solution
+Total Accepted: 51262 Total Submissions: 233578 Difficulty: Medium
+Given an absolute path for a file (Unix-style), simplify it.
+
+For example,
+path = "/home/", => "/home"
+path = "/a/./b/../../c/", => "/c"
+
+my solution:
+核心在于编写一个以'/'为分隔符的split函数
+
+以及用进出栈来保存最简路径。
+
+path:"/a/./b/../../c/"
+
+split:"a",".","b","..","..","c"
+
+stack:push(a), push(b), pop(b), pop(a), push(c) --> c
+class Solution {
+public:
+    string simplifyPath(string path) {
+        if(path == "" || path == "/")
+            return "/";
+        vector<string> vs;
+	    split(vs, path);
+	    stack<string> name_stack;
+	    for(const auto &e : vs){
+		if(e == ".") continue;
+		else if(e == ".."){
+		    if(!name_stack.empty()) 
+		        name_stack.pop();
+		}
+		else
+		    name_stack.push(e);
+	    }
+	    if(name_stack.empty()) 
+	        return "/";
+	    string res = "";
+	    while(!name_stack.empty()){
+		res = "/" + name_stack.top() + res;
+		name_stack.pop();
+	    }
+	    return res;    
+    }
+private:
+    void split(vector<string> &vs, string &s){
+	int begin = 0, len = s.size();
+	for(int i = 0; i < len; ++i){
+	    if(s[i] == '/'){
+	        string str = s.substr(begin, i - begin);
+		begin = i + 1;
+		if(str != "")
+		    vs.push_back(str);
+	    }
+	}
+	if(s[len - 1] != '/')
+	    vs.push_back(s.substr(begin, len - begin));
+    }
+};

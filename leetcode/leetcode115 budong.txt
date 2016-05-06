@@ -1,0 +1,62 @@
+115. Distinct Subsequences   My Submissions QuestionEditorial Solution
+Total Accepted: 50552 Total Submissions: 175408 Difficulty: Hard
+Given a string S and a string T, count the number of distinct subsequences of T in S.
+
+A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+Here is an example:
+S = "rabbbit", T = "rabbit"
+
+Return 3.
+
+动态规划。
+
+
+contains[i][j]表示：
+
+ s[0, i)中包含多少个值为t[0, j)的子序列。
+先考虑几个基本情况：
+
+
+对于contains[0][0]：
+此时s[0, 0)和t[0, 0)都是空串，我们可以说前者是包含一个值为空串的子序列的，因此contains[0][0] = 1。
+
+对于contains[0][j] (j >= 1)：
+ s[0, 0)是空串，而t[0, j)不是空串，因此前者不可能含有值为后者的子序列。此时，contains[0][j] = 0。
+
+对于contains[i][0] (i >= 1)：
+ s[0, i)不是空串，而t[0, 0)是空串，我们认为前者包含一个值为空串的子序列。因此，contains[i][0] = 1。
+
+对于contains[i][j] (i >= 1 and j >= 1)：
+如果s[i - 1] == t[j - 1]，那么：contains[i][j] = contains[i - 1][j - 1] + contains[i - 1][j]。
+如果二者不等，那么：contains[i][j] = contains[i - 1][j]。
+
+
+
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        int s_size = s.size(), t_size = t.size();
+        vector<int> vi(t_size + 1, 0);
+        vi[0] = 1;
+        vector<vector<int>> vvi(s_size + 1, vi);
+        for(int i = 1; i <= s_size; ++i)
+            for(int j = 1; j <= t_size; ++j){
+                if(s[i - 1] != t[j - 1])
+                    vvi[i][j] = vvi[i - 1][j];
+                else
+                    vvi[i][j] = vvi[i - 1][j - 1] + vvi[i - 1][j];
+            }
+        return vvi[s_size][t_size];
+    }
+};
+
+new solution:
+ int tLen = t.size();
+    vector<int> prefixVec(tLen,0);
+    for (auto c: s)
+        for (int i = tLen-1;i >= 0;--i)
+            if (t[i] == c)
+                prefixVec[i] = (i > 0 ? prefixVec[i-1] : 1) + prefixVec[i];
+    return prefixVec.back();
+https://leetcode.com/discuss/50336/4ms-7-lines-c-dp-solution-very-clear-almost-best
