@@ -1,0 +1,12 @@
+231. Power of Two   My Submissions QuestionEditorial Solution
+Total Accepted: 72799 Total Submissions: 198040 Difficulty: Easy
+Given an integer, write a function to determine if it is a power of two.
+
+
+my solution:
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        return n > 0 && !(n & (n - 1));
+    }
+};
