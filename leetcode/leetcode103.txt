@@ -1,0 +1,56 @@
+103. Binary Tree Zigzag Level Order Traversal   My Submissions QuestionEditorial Solution
+Total Accepted: 60531 Total Submissions: 210440 Difficulty: Medium
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree {3,9,20,#,#,15,7},
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+my solution:
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> vvi;
+        if(root == NULL) return vvi;
+        vector<int> vi;
+        queue<TreeNode*> node_queue;
+        node_queue.push(root);
+        node_queue.push(NULL);
+        while(!node_queue.empty()){
+            TreeNode *temp = node_queue.front();
+            node_queue.pop();
+            if(temp != NULL){
+                vi.push_back(temp -> val);
+                if(temp -> left ) node_queue.push(temp -> left);
+                if(temp -> right) node_queue.push(temp -> right);
+            }else{
+                vvi.push_back(vi);
+                vi.clear();
+                if(!node_queue.empty())
+                    node_queue.push(NULL);
+            }
+        }
+        for(int i = 1; i < vvi.size(); i += 2)
+            reverse(vvi[i].begin(), vvi[i].end());
+        return vvi;
+    }
+};
