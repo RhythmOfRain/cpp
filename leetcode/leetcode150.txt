@@ -1,0 +1,58 @@
+150. Evaluate Reverse Polish Notation   My Submissions QuestionEditorial Solution
+Total Accepted: 64630 Total Submissions: 272889 Difficulty: Medium
+Evaluate the value of an arithmetic expression in Reverse Polish Notation.
+
+Valid operators are +, -, *, /. Each operand may be an integer or another expression.
+
+Some examples:
+  ["2", "1", "+", "3", "*"] -> ((2 + 1) * 3) -> 9
+  ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
+
+my solution: stack来处理逆波兰式
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> res;
+        res.push(0);
+        int len = tokens.size();
+        for(int i = 0; i < len; ++i){
+            if(tokens[i] == "+"){
+                int num2 = res.top();
+                res.pop();
+                int num1 = res.top();
+                res.pop();
+                res.push(num1 + num2);
+            }
+            else if(tokens[i] == "-"){
+                int num2 = res.top();
+                res.pop();
+                int num1 = res.top();
+                res.pop();
+                res.push(num1 - num2);
+                
+            }
+            else if(tokens[i] == "*"){
+                int num2 = res.top();
+                res.pop();
+                int num1 = res.top();
+                res.pop();
+                res.push(num1 * num2);
+                
+            }
+            else if(tokens[i] == "/"){
+                int num2 = res.top();
+                res.pop();
+                int num1 = res.top();
+                res.pop();
+                //if(num2 == 0)
+                //   return 0;
+                res.push(num1 / num2);
+                
+            }
+            else{
+                res.push(stoi(tokens[i]));
+            }
+        }
+        return res.top();      
+    }
+};
