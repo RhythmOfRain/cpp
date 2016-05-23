@@ -1,0 +1,79 @@
+289. Game of Life My Submissions QuestionEditorial Solution
+Total Accepted: 18679 Total Submissions: 53992 Difficulty: Medium
+According to the Wikipedia's article: "The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970."
+
+Given a board with m by n cells, each cell has an initial state live (1) or dead (0). Each cell interacts with its eight neighbors (horizontal, vertical, diagonal) using the following four rules (taken from the above Wikipedia article):
+
+Any live cell with fewer than two live neighbors dies, as if caused by under-population.
+Any live cell with two or three live neighbors lives on to the next generation.
+Any live cell with more than three live neighbors dies, as if by over-population..
+Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+Write a function to compute the next state (after one update) of the board given its current state.
+
+Follow up: 
+Could you solve it in-place? Remember that the board needs to be updated at the same time: You cannot update some cells first and then use their updated values to update other cells.
+In this question, we represent the board using a 2D array. In principle, the board is infinite, which would cause problems when the active area encroaches the border of the array. How would you address these problems?
+
+my solution:
+用二进制表示的第一位表示原来的状态，第二位表示next状态，则所有节点初始化状态为00或者01，即数字0或1
+当初始状态为0，且周围life数等于3时，状态变为10，即数字2的二进制表示
+当初始状态为1，且周围life大于等于2，小于等于3时，状态变为11，即数字3的二进制表示
+扫描每个数字的第一位即得到原来的状态，将数字右移一位则得到next状态
+To solve it in place, we use 2 bits to store 2 states:
+
+[2nd bit, 1st bit] = [next state, current state]
+
+- 00  dead (next) <- dead (current)
+- 01  dead (next) <- live (current)  
+- 10  live (next) <- dead (current)  
+- 11  live (next) <- live (current) 
+In the beginning, every cell is either 00 or 01.
+Notice that 1st state is independent of 2nd state.
+Imagine all cells are instantly changing from the 1st to the 2nd state, at the same time.
+Let's count # of neighbors from 1st state and set 2nd state bit.
+Since every 2nd state is by default dead, no need to consider transition 01 -> 00.
+In the end, delete every cell's 1st state by doing >> 1.
+For each cell's 1st bit, check the 8 pixels around itself, and set the cell's 2nd bit.
+
+Transition 01 -> 11: when board == 1 and lives >= 2 && lives <= 3.
+Transition 00 -> 10: when board == 0 and lives == 3.
+To get the current state, simply do
+
+board[i][j] & 1
+To get the next state, simply do
+
+board[i][j] >> 1
+
+
+class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board) {
+        if(board.size() == 0 || board[0].size() == 0)
+            return;
+        int rows = board.size(), cols = board[0].size();
+        for(int i = 0; i < rows; ++i){
+            for(int j = 0; j < cols; ++j){
+                int lives = get_lives(board, rows, cols, i, j);
+                if(board[i][j] == 1 && lives >= 2 && lives <= 3)
+                    board[i][j] = 3;
+                if(board[i][j] == 0 && lives == 3)
+                    board[i][j] = 2;
+            }
+        }
+        for(int i = 0; i < rows; ++i){
+            for(int j = 0; j < cols; ++j){
+                board[i][j] >>= 1;
+            }
+        }
+        return;
+    }
+private:
+    int get_lives(vector<vector<int>>& board, int row, int col, int i, int j){
+        int lives = 0;
+        for(int m = max(0, i - 1); m <= min(i + 1, row - 1); ++m)
+            for(int n = max(0, j - 1); n <= min(j + 1, col - 1); ++n)
+                lives += (board[m][n] & 1);
+        lives -= (board[i][j] & 1);
+        return lives;
+    }
+};
