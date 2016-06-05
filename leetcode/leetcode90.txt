@@ -1,0 +1,45 @@
+90. Subsets II My Submissions QuestionEditorial Solution
+Total Accepted: 69135 Total Submissions: 223696 Difficulty: Medium
+Given a collection of integers that might contain duplicates, nums, return all possible subsets.
+
+Note: The solution set must not contain duplicate subsets.
+
+For example,
+If nums = [1,2,2], a solution is:
+
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+用上面的例子来说明算法：
+初始化子集里只有一个空集{}
+然后第一个数据是1，统计1的个数，只有一个，因此得到的集合是{1},结果集中有{{},{1}}
+第二个数据是2，统计2的个数，有两个，取出一起的子集，分别加入1到2个2，得到{2},{2,2},{1,2},{1,2,2},将其加入结果结合中得到最终的结果
+my solution:
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> res = {{}};
+        sort(nums.begin(), nums.end());
+        int len = nums.size();
+        for(int i = 0; i < len;){
+            int count = 0;
+            while(i + count < len && nums[i] == nums[i + count]) ++count;
+            int pre_count = res.size();
+            for(int j = 0; j < pre_count; ++j){
+                vector<int> cur_vec = res[j];
+                for(int k = 0; k < count; ++k){
+                    cur_vec.push_back(nums[i]);
+                    res.push_back(cur_vec);
+                }
+            }
+            i += count;
+        }
+        return res;
+    }
+};
