@@ -1,0 +1,43 @@
+8. String to Integer (atoi) My Submissions QuestionEditorial Solution
+Total Accepted: 108039 Total Submissions: 794331 Difficulty: Easy
+Implement atoi to convert a string to an integer.
+
+Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
+
+Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.
+
+Update (2015-02-10):
+The signature of the C++ function had been updated. If you still see your function signature accepts a const char * argument, please click the reload button  to reset your code definition.
+
+my solution:
+class Solution {
+public:
+    int myAtoi(string str) {
+        if(str == "") return 0;
+        int len = str.size(), i = 0;
+        //跳过空白
+        while(i < len && isspace(str[i])) ++i;
+        //处理符号
+        bool sign = true;
+        if(str[i] == '-'){
+            sign = false;
+            ++i;
+        }
+        else if(str[i] == '+') ++i;
+        //只处理数字
+        unsigned max_int = INT_MAX, min_int = -INT_MIN;
+        int sum = 0;
+        while(i < len && isdigit(str[i])){
+            int digit = str[i] - '0';
+            if(sign && (sum > max_int / 10 || (sum == max_int / 10 && digit > max_int % 10))){
+                return max_int;
+            }
+            if(!sign && (sum > min_int / 10 || (sum == min_int / 10 && digit > min_int % 10))){
+                return min_int;
+            }
+            sum = sum * 10 + digit;
+            ++i;
+        }
+        return sign == true ? sum : -sum;
+    }
+};
