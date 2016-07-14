@@ -1,0 +1,50 @@
+60. Permutation Sequence  QuestionEditorial Solution  My Submissions
+Total Accepted: 59051
+Total Submissions: 229083
+Difficulty: Medium
+The set [1,2,3,…,n] contains a total of n! unique permutations.
+
+By listing and labeling all of the permutations in order,
+We get the following sequence (ie, for n = 3):
+
+"123"
+"132"
+"213"
+"231"
+"312"
+"321"
+Given n and k, return the kth permutation sequence.
+
+Note: Given n will be between 1 and 9 inclusive.
+
+
+从高位到低位 一位一位地确定数字
+my solution:
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        vector<int> vi(n, 0);
+        for(int i = 0; i < n; ++i) vi[i] = i + 1;
+        string res = "";
+        while(n){
+            int fact = fac(n - 1);
+            int index = (k - 1) / fact;
+            res += (vi[index] + '0');
+            k -= index * fact;
+            for(int i = index + 1; i < vi.size(); ++i) vi[i - 1] = vi[i];
+            vi.pop_back();
+            --n;
+        }
+        return res;
+    }
+private:
+    int fac(int n){
+        if(n == 0 || n == 1) return 1;
+        int res = 1;
+        while(n > 1){
+            res *= n;
+            --n;
+        }
+        return res;
+    }
+};
