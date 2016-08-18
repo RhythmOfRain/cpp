@@ -1,0 +1,60 @@
+序列化二叉树
+
+
+请实现两个函数，分别用来序列化和反序列化二叉树
+
+序列化即使用拓展的前序遍历，将空节点用$表示
+反序列化即使用之前生成的拓展前序遍历来重新建立二叉树
+
+
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    char* Serialize(TreeNode *root) {    
+        helper(root, res);
+        return const_cast<char*>(res.c_str());
+    }
+    TreeNode* Deserialize(char *str) {
+        TreeNode *res = 0;
+        return create(res, str);
+    
+    }
+private:
+    string res;
+    void helper(TreeNode *root, string& os){
+        if(!root){
+            os += "$,";
+            return;
+        }
+        os += to_string(root -> val);
+        os += ',';
+        helper(root -> left, os);
+        helper(root -> right, os);    
+    }
+    TreeNode* create(TreeNode *bt, char *& str){
+        if(*str == '$'){
+            bt = nullptr;
+            str += 2;
+        }
+        else{
+            int sum = 0;
+            while(*str != ','){
+                sum = sum * 10 + ((*str++) - '0');
+            }
+            ++str;
+            bt = new TreeNode(sum);
+            bt -> left = create(bt -> left, str);
+            bt -> right = create(bt -> right, str);
+        }
+        return bt;
+    }
+};
