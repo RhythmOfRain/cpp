@@ -1,0 +1,115 @@
+79. Word Search  QuestionEditorial Solution  My Submissions
+Total Accepted: 85562
+Total Submissions: 356587
+Difficulty: Medium
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+For example,
+Given board =
+
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+
+my solution:
+1.这个方法当遇到测试用例
+Input:["ABCE","SFES","ADEE"]
+      "ABCESEEEFS"
+Output:false
+Expected:true
+会无法通过，原因是仅仅是DFS是不够的，需要回溯
+http://www.cnblogs.com/ganganloveu/p/4188131.html
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        if(board.empty() || board[0].empty() || word.empty())
+            return false;
+        int row = board.size(), col = board[0].size();
+        for(int i = 0; i < row; ++i){
+            for(int j = 0; j < col; ++j){
+                if(board[i][j] == word[0] && helper(board, word, i, j))
+                    return true;
+            }
+        }
+        return false;
+    }
+private:
+    struct Node{
+      int x, y, index;
+      Node(int x1, int y1, int index1):x(x1), y(y1), index(index1){}
+    };
+    int move[4][2] = {{0, 1},{0, -1},{1, 0},{-1, 0}};
+    bool helper(const vector<vector<char>>& board, const string& word, int x, int y){
+        int row = board.size(), col = board[0].size();
+        vector<vector<bool>> visited(row, vector<bool>(col, false));
+        stack<Node> st;
+        Node node(x, y, 0);
+        st.push(node);
+        while(!st.empty()){
+            Node temp = st.top();
+            if(temp.index == word.size() - 1)
+                return true;
+            bool next = false;
+            visited[temp.x][temp.y] = true;
+            for(int i = 0; i < 4; ++i){
+                int newx = temp.x + move[i][0];
+                int newy = temp.y + move[i][1];
+                int newindex = temp.index + 1;
+                if(newx >= 0 && newx < row && newy >= 0 && newy < col && !visited[newx][newy] && board[newx][newy] == word[newindex]){
+                    next = true;
+                    visited[newx][newy] = true;
+                    Node n(newx, newy, newindex);
+                    st.push(n);
+                }
+                if(next)
+                    break;
+            }
+            if(!next)
+                st.pop();
+        }
+        return false;
+    }
+};
+
+方法2：通过递归来实现dfs+backtracking
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        if(board.empty() || board[0].empty() || word.empty())
+            return false;
+        row = board.size(), col = board[0].size();
+        for(int i = 0; i < row; ++i){
+            for(int j = 0; j < col; ++j){
+                if(helper(board, i, j, word, 0))
+                    return true;
+            }
+        }
+        return false;
+    }
+private:
+    int row = 0, col = 0;
+bool helper(vector<vector<char>>& board, int x, int y, const string& word, int idx){
+    //int row = board.size(), col = board[0].size();
+    if(idx == word.size())
+        return true;
+    if(x < 0 || x >= row || y < 0 || y >= col)
+        return false;
+    if(board[x][y] != word[idx])
+        return false;
+    bool res = false;
+    board[x][y] ^= 128;
+    res = helper(board, x - 1, y, word, idx + 1) ||
+          helper(board, x + 1, y, word, idx + 1) ||
+          helper(board, x, y - 1, word, idx + 1) ||
+          helper(board, x, y + 1, word, idx + 1);
+    board[x][y] ^= 128;
+    return res;
+}
+};

@@ -1,0 +1,69 @@
+295. Find Median from Data Stream  QuestionEditorial Solution  My Submissions
+Total Accepted: 21231
+Total Submissions: 93909
+Difficulty: Hard
+Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+Examples: 
+[2,3,4] , the median is 3
+
+[2,3], the median is (2 + 3) / 2 = 2.5
+
+Design a data structure that supports the following two operations:
+
+void addNum(int num) - Add a integer number from the data stream to the data structure.
+double findMedian() - Return the median of all elements so far.
+For example:
+
+add(1)
+add(2)
+findMedian() -> 1.5
+add(3) 
+findMedian() -> 2
+
+my solution:
+class MedianFinder {
+public:
+
+    // Adds a number into the data structure.
+    void addNum(int num) {
+        if((xiaodui.size() + dadui.size()) % 2 == 0){//oushu
+            if(!xiaodui.empty() && num > xiaodui.top()){
+                int temp = xiaodui.top();
+                xiaodui.pop();
+                xiaodui.push(num);
+                dadui.push(temp);
+            }else{
+                dadui.push(num);
+            }     
+    	}else{
+            if(!dadui.empty() && num < dadui.top()){
+                int temp = dadui.top();
+                dadui.pop();
+                dadui.push(num);
+                xiaodui.push(temp);
+            }else{
+                xiaodui.push(num);
+            }
+            
+        }
+        
+    }
+
+    // Returns the median of current data stream
+    double findMedian() {
+        if(!(xiaodui.size() + dadui.size())) return -1;
+        if((xiaodui.size() + dadui.size()) % 2 == 0)
+            return (xiaodui.top() + dadui.top()) / 2.0;
+        else
+        	return dadui.top();
+    }
+private:
+    priority_queue<int, vector<int>,greater<int>> xiaodui;
+    priority_queue<int> dadui;
+};
+
+// Your MedianFinder object will be instantiated and called as such:
+// MedianFinder mf;
+// mf.addNum(1);
+// mf.findMedian();
