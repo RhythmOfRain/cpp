@@ -1,0 +1,35 @@
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    TreeNode* Convert(TreeNode* pRootOfTree)
+    {
+        if(!pRootOfTree) return NULL;
+        TreeNode* res = pRootOfTree;
+        while(res -> left)
+            res = res -> left;
+        //p代表前驱结点的指针
+        TreeNode *p = NULL;
+        helper(pRootOfTree, &p);
+        return res;
+    }
+private:
+    void helper(TreeNode* root, TreeNode **lastNode){
+        if(!root) return;
+        if(root -> left)
+            helper(root -> left, lastNode);
+        root -> left = *lastNode;
+        if(*lastNode != NULL)
+            (*lastNode) -> right = root;
+        *lastNode = root;
+        if(root -> right)
+            helper(root -> right, lastNode);
+    }
+};
