@@ -1,0 +1,51 @@
+44. Wildcard Matching  QuestionEditorial Solution  My Submissions
+Total Accepted: 66648
+Total Submissions: 365794
+Difficulty: Hard
+Implement wildcard pattern matching with support for '?' and '*'.
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "*") → true
+isMatch("aa", "a*") → true
+isMatch("ab", "?*") → true
+isMatch("aab", "c*a*b") → false
+
+my solution:
+主要的思想是：
+1.*s==*p or *p == ? ：匹配，s++ p++。
+2. p=='*'：也是一个匹配，但可能有0个或者多个字符用于匹配，所以将'*'所在位置保存(star)，并且将s的位置也保存下来(ss)。
+3. 如果不匹配，查看之前是否有'*'。没有则返回false，有则对ss的下一个位置和start之后的重新匹配。
+暴力法，复杂度是O(slen*slen)。
+
+由于例子中plen和slen相差不大，而且暴力法在搜索途中就能发现不匹配的字符串，终止搜索；而DP需要在遍历完所有子问题后才能给出解，所以第二种方法快得多。
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        return helper(s.c_str(), p.c_str());
+        
+    }
+private:
+    bool helper(const char *s, const char *p){
+        const char *star = NULL;//means '*'
+        const char *ss = s;//means 's start'
+        while(*s){
+            if(*p == '?' || *s == *p){++s;++p;continue;}
+            if(*p == '*'){star = p++;ss = s;continue;}
+            if(star){p = star + 1; s = ++ss;continue;}
+            return false;
+        }
+        while(*p == '*') ++p;
+        return *p == '\0';
+    }
+};
