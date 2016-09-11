@@ -1,0 +1,40 @@
+47. Permutations II  QuestionEditorial Solution  My Submissions
+Total Accepted: 77455
+Total Submissions: 269463
+Difficulty: Medium
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+[1,1,2] have the following unique permutations:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+
+my solution:
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> res;
+        if(nums.size() < 2){res.push_back(nums);return res;}
+        sort(nums.begin(), nums.end());
+        res.push_back(nums);
+        int i = 0;
+        while((i = change(nums)) != -1){
+            int j = nums.size() - 1;
+            while(nums[j] <= nums[i] ) --j;
+            if(j < 0) break;
+            swap(nums[i], nums[j]);
+            sort(nums.begin() + i + 1, nums.end());
+            res.push_back(nums);
+        }
+        return res;
+    }
+private:
+    int change(const vector<int>& nums){
+        int i = nums.size() - 2;
+        while(nums[i] >= nums[i + 1]) --i;
+        return i;
+    }
+};

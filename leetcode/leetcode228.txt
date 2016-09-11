@@ -1,0 +1,31 @@
+228. Summary Ranges My Submissions QuestionEditorial Solution
+Total Accepted: 48494 Total Submissions: 194385 Difficulty: Medium
+Given a sorted integer array without duplicates, return the summary of its ranges.
+
+For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+
+0-1-2因为是连续的，所以可以合为0->2
+my solution:
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+         vector<string> res;
+         if(nums.empty())
+            return res;
+        auto len = nums.size();
+        for(int i = 0; i < len; ){
+            int j = i + 1;
+            while(j < len && nums[j] - nums[j - 1] == 1)
+                ++j;
+            if(j - i > 1){
+                string temp = to_string(nums[i]) + "->" + to_string(nums[j - 1]);
+                res.push_back(temp);
+               
+            }else{
+                res.push_back(to_string(nums[i]));
+            }
+            i = j;
+        }
+        return res;
+    }
+};

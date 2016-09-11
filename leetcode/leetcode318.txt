@@ -1,0 +1,42 @@
+318. Maximum Product of Word Lengths  QuestionEditorial Solution  My Submissions
+Total Accepted: 25905
+Total Submissions: 64374
+Difficulty: Medium
+Given a string array words, find the maximum value of length(word[i]) * length(word[j]) where the two words do not share common letters. You may assume that each word will contain only lower case letters. If no such two words exist, return 0.
+
+Example 1:
+Given ["abcw", "baz", "foo", "bar", "xtfn", "abcdef"]
+Return 16
+The two words can be "abcw", "xtfn".
+
+Example 2:
+Given ["a", "ab", "abc", "d", "cd", "bcd", "abcd"]
+Return 4
+The two words can be "ab", "cd".
+
+Example 3:
+Given ["a", "aa", "aaa", "aaaa"]
+Return 0
+No such pair of words.
+
+my solution:
+class Solution {
+public:
+    int maxProduct(vector<string>& words) {
+        if(words.size() < 2) return 0;
+        int res = 0;
+        vector<int> vi;
+        for(const auto& str : words){
+            int i = 0;
+            for(const auto &e : str)
+                i |= 1 << (e - 'a');
+            vi.push_back(i);
+        }
+        for(int i = 0; i < vi.size() - 1; ++i)
+            for(int j = i + 1; j < vi.size(); ++j){
+                if(!(vi[i] & vi[j]) && words[i].size() * words[j].size() > res)
+                    res =  words[i].size() * words[j].size();
+            }
+        return res;
+    }
+};

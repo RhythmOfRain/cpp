@@ -1,0 +1,65 @@
+143. Reorder List My Submissions QuestionEditorial Solution
+Total Accepted: 68104 Total Submissions: 292637 Difficulty: Medium
+Given a singly linked list L: L0¡úL1¡ú¡­¡úLn-1¡úLn,
+reorder it to: L0¡úLn¡úL1¡úLn-1¡úL2¡úLn-2¡ú¡­
+
+You must do this in-place without altering the nodes' values.
+
+For example,
+Given {1,2,3,4}, reorder it to {1,4,2,3}.
+
+
+my solution:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    inline ListNode* reverse(ListNode* head){
+        if(!head || head -> next == NULL) return head;
+        ListNode *cur = head, *move_one = head -> next;
+        cur -> next = NULL;
+        while(move_one){
+            ListNode *move_two = move_one -> next;
+            move_one -> next = cur;
+            cur = move_one;
+            move_one = move_two;
+        }
+        return cur;
+    }
+    inline void merge(ListNode* head, ListNode* head2){
+        ListNode *p = head, *q = head2;
+        while(q){
+            ListNode *temp = q;
+            q = q -> next;
+            temp -> next = p -> next;
+            p -> next = temp;
+            p = p -> next -> next;
+        }
+    }
+    
+public:
+    void reorderList(ListNode* head) {
+        int count = 0;
+        ListNode *p = head;
+        while(p){
+            ++count;
+            p = p -> next;
+        }
+        if(count < 3) return;
+        int half = count % 2 ? count / 2 : count / 2 - 1;
+        p = head;
+        while(half--)
+            p = p -> next;
+        ListNode* head2 = reverse(p -> next);
+        p -> next = NULL;
+        merge(head, head2);
+        return;
+        
+    }
+};

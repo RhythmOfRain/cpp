@@ -1,0 +1,32 @@
+260. Single Number III My Submissions QuestionEditorial Solution
+Total Accepted: 38318 Total Submissions: 85062 Difficulty: Medium
+Given an array of numbers nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once.
+
+For example:
+
+Given nums = [1, 2, 1, 3, 2, 5], return [3, 5].
+
+Note:
+The order of the result is not important. So in the above example, [5, 3] is also correct.
+Your algorithm should run in linear runtime complexity. Could you implement it using only constant space complexity?
+
+my solution:
+分两步
+    1.将所有的数进行异或，我们会得到一个diff，根据异或的性质，同0异1，那么出现两次的数异或后都会变成0，我们得到的diff相当于两个只出现1次的不同的数的异或值，下一步我们需要把这两个数a和b找出来，因为这两个数肯定是不同的，那么一定会有某些位异或后得1，根据diff，我们可以找到diff中任意一个出现1的位，用来区分这两个数，这里我们采用的是低位中第一个出现1的位，为了获取这个位，可以用diff & -diff求出来，举个例子，diff = 6 (0110)，-diff(1010)， diff & -diff = (0110) & (1010) = 0010 即出现1最低的那一位，这个位可以在第二部中用来区分a和b， 我们可以用 diff &= -diff 把diff改成这个可区分的位0010
+
+2. 接下来是要根据可区分为把所有的数分成两组，遍历所有的数，当nums[i] & diff == 0时，分为一组，当nums[i] & diff != 0 时分为另一组，最后我们可以确定a和b这两个值肯定被分在了两个组当中，另外，可以优化的地方就是，我们在分组的时候可以开始不断地取异或，将出现了两次的数字抵消掉，最后的值就是我们要的a和b了
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int diff = accumulate(nums.begin(), nums.end(), 0, bit_xor<int>());
+        diff &= -diff;
+        vector<int> res(2, 0);
+        for(const auto &e : nums){
+            if(e & diff)
+                res[0] ^= e;
+            else
+                res[1] ^= e;
+        }
+        return res;
+    }
+};

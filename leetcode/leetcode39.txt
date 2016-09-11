@@ -1,0 +1,45 @@
+39. Combination Sum  QuestionEditorial Solution  My Submissions
+Total Accepted: 101612
+Total Submissions: 314787
+Difficulty: Medium
+Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+The same repeated number may be chosen from C unlimited number of times.
+
+Note:
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+For example, given candidate set [2, 3, 6, 7] and target 7, 
+A solution set is: 
+[
+  [7],
+  [2, 2, 3]
+]
+
+my solution:
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        if(candidates.size() == 0) return res;
+        dfs(0, 0, candidates, target);
+        return res;
+    }
+private:
+    vector<vector <int>> res;
+    vector<int> cur;
+    void dfs(int i, int sum, vector<int>& candidates, int target){
+        if(sum == target){
+            res.push_back(cur);
+            return;
+        }
+        else if(sum > target)
+            return;
+        else{
+            for(int index = i; index < candidates.size(); ++index){
+                cur.push_back(candidates[index]);
+                dfs(index, sum + candidates[index], candidates, target);
+                cur.pop_back();
+            }
+        }
+    }
+};

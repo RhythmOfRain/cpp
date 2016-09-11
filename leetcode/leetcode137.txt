@@ -1,0 +1,23 @@
+137. Single Number II My Submissions QuestionEditorial Solution
+Total Accepted: 87466 Total Submissions: 228652 Difficulty: Medium
+Given an array of integers, every element appears three times except for one. Find that single one.
+
+Note:
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+my solution:
+对32位中每一位上的1进行计算，结果要么是3N要么是3N+1，如果是3N+1，则证明结果对应位上是1
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int res = 0, len = nums.size();
+        for(int i = 0; i < 32; ++i){
+            int temp = 0;
+            for(int j = 0; j < len; ++j){
+                temp += ((nums[j] >> i) & 1);
+            }
+            res |= (temp %= 3) << i;
+        }
+        return res;
+    }
+};

@@ -1,0 +1,23 @@
+201. Bitwise AND of Numbers Range  QuestionEditorial Solution  My Submissions
+Total Accepted: 37525
+Total Submissions: 119786
+Difficulty: Medium
+Given a range [m, n] where 0 <= m <= n <= 2147483647, return the bitwise AND of all numbers in this range, inclusive.
+
+For example, given the range [5, 7], you should return 4.
+
+目标是把所有数&操作
+方法，求公共1的前缀，因为要所有数字对应位上都是1，最后结果才是1
+my solution:
+class Solution {
+public:
+    int rangeBitwiseAnd(int m, int n) {
+        int bit = 0;
+        while(m != n){
+            m >>= 1;
+            n >>= 1;
+            ++bit;
+        }
+        return m << bit;
+    }
+};

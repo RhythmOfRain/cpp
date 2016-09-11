@@ -1,0 +1,25 @@
+371. Sum of Two Integers  QuestionEditorial Solution  My Submissions
+Total Accepted: 6718
+Total Submissions: 12927
+Difficulty: Easy
+Calculate the sum of two integers a and b, but you are not allowed to use the operator + and -.
+
+Example:
+Given a = 1 and b = 2, return 3.
+
+my solution:Î»²Ù×÷
+class Solution {
+public:
+    int getSum(int a, int b) {
+        int sum = 0, i = 0, canary = 0;
+        while(i < 32){
+            int lhs = (a >> i) & 1;
+            int rhs = (b >> i) & 1;
+            sum |= (lhs ^ rhs ^ canary) << i;
+            if((lhs & rhs)|| ((lhs | rhs) & canary)) canary = 1;
+            else canary = 0;
+            ++i;
+        }
+        return sum;
+    }
+};

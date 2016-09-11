@@ -1,0 +1,22 @@
+50. Pow(x, n)  QuestionEditorial Solution  My Submissions
+Total Accepted: 97275
+Total Submissions: 350535
+Difficulty: Medium
+Implement pow(x, n).
+
+注意 n1必须是unsigned 因为最小的负数转换为整数的话 signed int 表示不了
+my solution:
+class Solution {
+public:
+    double myPow(double x, int n) {
+        double res = 1.0;
+        x = n >= 0 ? x : 1 / x;
+        unsigned n1 = abs(n);
+        while(n1){
+            if(n1 & 1) res *= x;
+            n1 >>= 1;
+            x *= x;
+        }
+        return res;
+    }
+};
