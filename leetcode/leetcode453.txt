@@ -1,0 +1,36 @@
+453. Minimum Moves to Equal Array Elements   QuestionEditorial Solution  My Submissions
+Total Accepted: 2159
+Total Submissions: 4998
+Difficulty: Easy
+Contributors: amehrotra2610
+Given a non-empty integer array of size n, find the minimum number of moves required to make all array elements equal, where a move is incrementing n - 1 elements by 1.
+
+Example:
+
+Input:
+[1,2,3]
+
+Output:
+3
+
+Explanation:
+Only three moves are needed (remember each move increments two elements):
+
+[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
+
+my solution:
+我的代码：
+1）首先花了几分钟理解题意：给出一个整数非空数组，每次使得其中n-1个数字+1（n为数组长度）问最少几次使得数组中的每个数据相等？
+2）其次既然询问最少次数，我们观察例子中如何达到最少：每次选择的n-1个均避开当前数组中最大值。
+3）如果在代码中将数组变换的中间结果列出，算法复杂度肯定较大，所以我们逆向思考：目的都是数组中每个数据彼此相等，那么每次使得其中1个数据-1，最终达到目的 与题意的moves相同。
+4）3）中的思路可以转换为数组中的每个非最小值到最小值的次数，则moves += ！min[i] - min。同样可以转换为数组的sum - min*n
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        if(nums.empty())
+            return 0;
+        long long sum = accumulate(nums.begin(), nums.end(), 0L);
+        int minEle = *min_element(nums.begin(), nums.end());
+        return sum - minEle * nums.size();
+    }
+};

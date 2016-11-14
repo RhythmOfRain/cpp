@@ -1,0 +1,77 @@
+438. Find All Anagrams in a String   QuestionEditorial Solution  My Submissions
+Total Accepted: 6050
+Total Submissions: 18168
+Difficulty: Easy
+Contributors: Stomach_ache
+Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
+
+Strings consists of lowercase English letters only and the length of both strings s and p will not be larger than 20,100.
+
+The order of output does not matter.
+
+Example 1:
+
+Input:
+s: "cbaebabacd" p: "abc"
+
+Output:
+[0, 6]
+
+Explanation:
+The substring with start index = 0 is "cba", which is an anagram of "abc".
+The substring with start index = 6 is "bac", which is an anagram of "abc".
+Example 2:
+
+Input:
+s: "abab" p: "ab"
+
+Output:
+[0, 1, 2]
+
+Explanation:
+The substring with start index = 0 is "ab", which is an anagram of "ab".
+The substring with start index = 1 is "ba", which is an anagram of "ab".
+The substring with start index = 2 is "ab", which is an anagram of "ab".
+
+
+my solution:
+滑动窗口的方法 0(N)
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        if(s.empty() || p.empty() || s.size() < p.size())
+            return {};
+        vector<int> pcnt(26, 0), scnt(26, 0), res;
+        int slen = s.size(), plen = p.size();
+        for(int i = 0; i < plen; ++i){
+            ++pcnt[p[i] - 'a'];
+            ++scnt[s[i] - 'a'];   
+        }
+        if(scnt == pcnt) res.push_back(0);
+        for(int i = plen; i < slen; ++i){
+            ++scnt[s[i] - 'a'];
+            --scnt[s[i - p.size()] - 'a'];
+            if(scnt == pcnt)
+                res.push_back(i - p.size() + 1);
+        }
+        return res;
+    }
+};
+
+更简洁的解法：
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> ans;
+        int freqs[26]{};                                            // to record number of each chars in p
+        
+        for (char c : p) { freqs[c - 'a']++; }                      // initialize freqs
+        
+        for (int l = 0, r = 0, cnt = 0; r < s.length(); r++) {      // sliding window checks
+            if (r - l == p.length() && ++freqs[s[l++] - 'a'] > 0) { cnt--; }
+            if (freqs[s[r] - 'a']-- > 0 && ++cnt == p.length()) { ans.push_back(l); }
+        }
+        
+        return ans;
+    }
+};

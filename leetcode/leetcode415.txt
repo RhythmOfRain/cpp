@@ -1,0 +1,72 @@
+415. Add Strings   QuestionEditorial Solution  My Submissions
+Total Accepted: 11016
+Total Submissions: 26616
+Difficulty: Easy
+Contributors: Admin
+Given two non-negative numbers num1 and num2 represented as string, return the sum of num1 and num2.
+
+Note:
+
+The length of both num1 and num2 is < 5100.
+Both num1 and num2 contains only digits 0-9.
+Both num1 and num2 does not contain any leading zero.
+You must not use any built-in BigInteger library or convert the inputs to integer directly.
+
+
+
+my solution:生成新的字符串
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        if(num1.empty()) return num2;
+        if(num2.empty()) return num1;
+        int i = num1.size() - 1, j = num2.size() - 1, canary = 0;
+        string res;
+        while(i >= 0 && j >= 0){
+            int digit = (num1[i--] - '0') + (num2[j--] - '0') + canary;
+            canary = digit / 10;
+            res += (digit % 10) + '0';
+        }
+        while(i >= 0){
+            int digit = (num1[i--] - '0') + canary;
+            canary = digit / 10;
+            res += (digit % 10) + '0';
+        }
+        while(j >= 0){
+            int digit = (num2[j--] - '0') + canary;
+            canary = digit / 10;
+            res += (digit % 10) + '0';
+        }
+        if(canary)
+            res += "1";
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+
+
+solution2:在原字符串上操作
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        if(num1.empty()) return num2;
+        if(num2.empty()) return num1;
+        if(num1.size() < num2.size()) 
+            return addStrings(num2, num1);
+        int canary = 0, i, j;
+        
+        for(i = num1.size() - 1, j = num2.size() - 1; j >= 0; --i, --j){
+            int digit = num1[i] - '0' + num2[j] - '0' + canary;
+            num1[i] = digit % 10 + '0';
+            canary = digit / 10;
+        }
+        for(;i >= 0 && canary;--i){
+            int digit = num1[i] - '0' + canary;
+            num1[i] = digit % 10 + '0';
+            canary = digit / 10;
+        }
+        if(canary)
+            num1 = "1" + num1;
+        return num1;
+    }
+};
