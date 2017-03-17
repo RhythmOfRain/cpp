@@ -1,0 +1,65 @@
+476. Number Complement
+
+Given a positive integer, output its complement number. The complement strategy is to flip the bits of its binary representation.
+
+Note:
+The given integer is guaranteed to fit within the range of a 32-bit signed integer.
+You could assume no leading zero bit in the integer¡¯s binary representation.
+Example 1:
+Input: 5
+Output: 2
+Explanation: The binary representation of 5 is 101 (no leading zero bits), and its complement is 010. So you need to output 2.
+Example 2:
+Input: 1
+Output: 0
+Explanation: The binary representation of 1 is 1 (no leading zero bits), and its complement is 0. So you need to output 0.
+
+my solution:
+class Solution {
+public:
+    int findComplement(int num) {
+        if(num <= 0) 
+            return ~num;
+        unsigned mask = 0xffffffff;
+        int res = ~num, i;
+        for(i = 0; num ; ++i){
+            num >>= 1;
+            mask >>= 1;
+        }
+        return res & ~(mask << i);
+    }
+};
+
+class Solution {
+public:
+    int findComplement(int num) {
+        int mask = ~0;
+        while(num & mask)
+            mask <<= 1;
+        return ~num & ~mask;
+    }
+};
+
+
+class Solution {
+public:
+    int findComplement(int num) {
+        int mask = num;
+        mask |= (mask >> 1);
+        mask |= (mask >> 2);
+        mask |= (mask >> 4);
+        mask |= (mask >> 8);
+        mask |= (mask >> 16);
+        return num ^ mask;
+    }
+};
+
+To understand the solution, we need to go backwards. The aim is to xor the given number with a mask. The mask should contain all 1s in its rightmost bits. However, the number of rightmost bits is important. In the case of 5(101), for example, the number of rightmost bits must be 3, since 5 uses 3 rightmost bits. The mask must be 111 for 5(101). When we xor 111 with 101, we will get 010. As another example, the mask will be 111111 for 38(100110)
+
+So the problem boils down to generating the mask. Let's think about 8-bit numbers. We can later extend the same logic to 32-bit integers. I will count the bits from right to left, starting with 1.
+
+The largest positive numbers represented by 8 bits will set 7th bit. 64(01000000) is the largest positive number represented by 8 bits, which has the most number of 0s. It is important for our explanation since we must turn all those 0s into 1s.
+
+The first operation, mask |= mask>>1; will set the 6th bit. So, mask will become (01100000). Now, we know that the 7th and 6th bits are set, we can safely shift the mask to right by not 1 but 2 bits. mask |= mask>>2; will now set the 5th and 4th bits. By the same reason, we can now shift the mask to right by not 1, 2 or 3 but 4 bits. That is the threshold for 8-bit numbers. We do not need to shift more.
+
+For 32-bit integers, the shift operations should continue until reaching to 16. For 64-bit longs, that will be 32.
