@@ -30,3 +30,22 @@ public:
         return res;
     }
 };
+第二种写法比第一张写法快，因为使用局部变量，减少了存储器访问
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int mask = 0;
+        for(auto e : nums)
+            mask ^= e;
+        mask &= ~(mask - 1);
+        int num1 = 0, num2 = 0;
+        for(auto e : nums){
+            if(e & mask)
+                num1 ^= e;
+            else
+                num2 ^= e;
+        }
+        vector<int> res = {num1, num2};
+        return res;
+    }
+};
