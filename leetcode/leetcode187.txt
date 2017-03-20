@@ -42,3 +42,22 @@ G : 0100 0111
 T : 0101 0100
 这4个字符的末3位是不同的，因此，我们可以 3个bits 来表示其中的一个字符。
 又因为每个子串的长度为10，因此总的位数是：10 x 3 = 30，一个int就足够存放它。
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        if(s.size() <= 10)
+            return {};
+        unordered_map<int, int> cnt;
+        vector<string> res;
+        size_t len = s.size(), threshold = len - 9;
+        for(size_t i = 0; i < threshold; ++i){
+            int hash = 0;
+            for(size_t j = i; j < i + 10; ++j){
+                hash = ((hash << 3) | (s[j] & 7));
+            }
+            if(cnt[hash]++ == 1)
+                res.push_back(s.substr(i, 10));
+        }
+        return res;
+    }
+};
