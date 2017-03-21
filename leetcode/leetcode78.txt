@@ -1,0 +1,36 @@
+78. Subsets
+
+Given a set of distinct integers, nums, return all possible subsets.
+
+Note: The solution set must not contain duplicate subsets.
+
+For example,
+If nums = [1,2,3], a solution is:
+
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+
+my solution:
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        int ele_nums = nums.size();
+        int sub_nums = pow(2, ele_nums);
+        vector<vector<int>> res(sub_nums, vector<int>());
+        for(int i = 0; i < ele_nums; ++i){
+            for(int j = 0; j < sub_nums; ++j){
+                if((j >> i) & 1)
+                    res[j].push_back(nums[i]);
+            }
+        }
+        return res;   
+    }
+};
