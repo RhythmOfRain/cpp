@@ -21,3 +21,15 @@ public:
         return res;
     }
 };
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int high = 0, low = 0;
+        for(auto e : nums){
+            high = ~low & (high ^ e);
+            low = ~high & (low  ^ e);
+        }
+        return high;
+    }
+};

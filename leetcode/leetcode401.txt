@@ -1,0 +1,26 @@
+401. Binary Watch
+
+class Solution {
+public:
+    vector<string> readBinaryWatch(int num) {
+        vector<string> res;
+        for(int i = 0; i < 12; ++i){
+            for(int j = 0; j < 60; ++j){
+                if(cntbit((i << 6) + j) == num){
+                    string time = to_string(i) + (j < 10 ? ":0" : ":") + to_string(j);
+                    res.push_back(time);
+                }
+            }
+        }
+        return res;
+    }
+private:
+    int cntbit(int n){
+        int cnt = 0;
+        while(n){
+            n &= (n - 1);
+            ++cnt;
+        }
+        return cnt;
+    }
+};
