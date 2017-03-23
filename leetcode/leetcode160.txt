@@ -74,3 +74,19 @@ public:
         return NULL;
     }
 };
+第二种解法，非常优美，其中含义是假设两个链表的长度分别是A,B,此时有A==B和A != B，同时分别讨论有交点和没有交点
+
+假设A == B,同时如果有交点，会同时到达交点，如果没有交点，会同时到达NULL
+假设A != B,如果有交点，假设公共部分长度为K，则走（m + n - k）步后会重合（画图易证），如果没有交点，走m+n步后达到NULL。
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(!headA || !headB) return NULL;
+        ListNode* iter1 = headA, *iter2 = headB;
+        while(iter1 != iter2){
+            iter1 = iter1 ? iter1 -> next : headB;
+            iter2 = iter2 ? iter2 -> next : headA;
+        }
+        return iter1;
+    }
+};
