@@ -55,3 +55,30 @@ public:
         return pre;
     }
 };
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if(!head || !head -> next) return head;
+        ListNode head1(0), head2(0);
+        ListNode *iter1 = &head1, *iter2 = &head2;
+        while(head){
+            if(head -> val < x)
+                iter1 = iter1 -> next = head;
+            else
+                iter2 = iter2 -> next = head;
+            head = head -> next;
+        }
+        iter2 -> next = NULL;
+        iter1 -> next = head2.next;
+        return head1.next;
+    }
+};
