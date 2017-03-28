@@ -48,3 +48,25 @@ private:
         return slow;
     }
 };
+
+
+¸Ä½ø°æ£º
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if(!head) return NULL;
+        if(!head -> next) return new TreeNode(head -> val);
+        ListNode *fast , *slow, *pre;
+        fast = slow = pre =head;
+        while(fast && fast -> next){
+            pre = slow;
+            slow = slow -> next;
+            fast = fast -> next -> next;
+        }
+        pre -> next = NULL;
+        TreeNode *root = new TreeNode(slow -> val);
+        root -> left = sortedListToBST(head);
+        root -> right = sortedListToBST(slow -> next);
+        return root;
+    }
+};

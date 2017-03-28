@@ -37,3 +37,24 @@ public:
         return head;
     }
 };
+
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if(!head) return NULL;
+        ListNode odd(0), even(0);
+        ListNode *iter1 = &odd, *iter2 = &even;
+        int cnt = 1;
+        while(head){
+            if(cnt & 1)
+                iter1 = iter1 -> next = head;
+            else
+                iter2 = iter2 -> next = head;
+            ++cnt;
+            head = head -> next;
+        }
+        iter1 -> next = even.next;
+        iter2 -> next = NULL;
+        return odd.next;
+    }
+};
